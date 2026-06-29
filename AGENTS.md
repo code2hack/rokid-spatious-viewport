@@ -8,11 +8,12 @@ Any agent working in this repository must read these files before coding:
 
 1. `docs/codex/START_PROMPT.md`
 2. `docs/codex/PM_ORCHESTRATION.md`
-3. `docs/PROJECT_PLAN.md`
-4. `docs/WORK_BREAKDOWN.md`
-5. `docs/adr/0001-scope-spatial-viewport.md`
-6. `docs/adr/0002-selected-streaming-strategy.md`
-7. `docs/adr/0003-mediaprojection-boundaries.md`
+3. `docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md`
+4. `docs/PROJECT_PLAN.md`
+5. `docs/WORK_BREAKDOWN.md`
+6. `docs/adr/0001-scope-spatial-viewport.md`
+7. `docs/adr/0002-selected-streaming-strategy.md`
+8. `docs/adr/0003-mediaprojection-boundaries.md`
 
 ## Current project scope
 
@@ -20,19 +21,30 @@ Rokid Spatious Viewport is a head-tracked spatial viewport for mirrored Android 
 
 It is not primarily a Termux terminal project anymore. Termux remains an important future/flagship mirrored app use case, but the core architecture is app-surface mirroring plus spatial viewport navigation.
 
-## Current implementation priority
+## Current implementation order
 
-The first breakthrough is:
+The PM must follow this order unless the user explicitly changes it:
 
 ```text
-MediaProjection capture
+1. Clean root/meta docs to match the spatial viewport pivot.
+2. Create Kotlin Android project skeleton.
+3. Add pure viewport geometry module/tests first.
+4. Add MediaProjection capture proof after the Android skeleton and viewport-core exist.
+```
+
+The first technical breakthrough is:
+
+```text
+Kotlin Android skeleton
+→ pure viewport geometry model/tests
+→ MediaProjection capture proof
 → captured frame on padded virtual canvas
 → viewport pan over that canvas
 → fixed center reticle
 → overscan cache prototype
 ```
 
-Do not start with Rokid SDK, ASR, Bluetooth ring, Termux internals, semantic OCR, or AccessibilityService unless the PM explicitly assigns that work.
+Do not start with Rokid SDK, ASR, Bluetooth ring, Termux internals, semantic OCR, or AccessibilityService unless the PM explicitly assigns that work after the skeleton and viewport core are stable.
 
 ## Agent roles
 
@@ -43,7 +55,10 @@ The PM agent owns architecture, task slicing, branch sequencing, review, and fin
 The PM must:
 
 - Read `docs/codex/PM_ORCHESTRATION.md`.
+- Read `docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md`.
 - Inspect the current repo/build state before assigning work.
+- Clean stale root/meta docs before product coding.
+- Prefer Kotlin for Android implementation.
 - Keep worker tasks narrow and non-overlapping.
 - Ask workers for plans before code when scope is uncertain.
 - Merge geometry/core abstractions before capture integration when possible.
@@ -66,13 +81,15 @@ A worker must:
 
 Use at most two worker agents in the current phase unless the PM explicitly decides otherwise.
 
-1. MediaProjection capture worker
-   - Branch: `feat/mediaprojection-capture`
-   - Prompt: `docs/codex/workers/MEDIAPROJECTION_CAPTURE.md`
-
-2. Spatial viewport core worker
+1. Spatial viewport core worker
    - Branch: `feat/spatial-viewport-core`
    - Prompt: `docs/codex/workers/SPATIAL_VIEWPORT_CORE.md`
+   - Should start after Kotlin Android skeleton exists or after PM creates a suitable pure Kotlin module.
+
+2. MediaProjection capture worker
+   - Branch: `feat/mediaprojection-capture`
+   - Prompt: `docs/codex/workers/MEDIAPROJECTION_CAPTURE.md`
+   - Must wait until Android skeleton exists. Prefer starting after viewport-core exists.
 
 A third worker is optional only for docs/build tooling. Do not start a Rokid worker yet.
 
