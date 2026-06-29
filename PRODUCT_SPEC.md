@@ -1,41 +1,39 @@
 # Product Specification
 
-Status: **draft / pre-discovery**  
-Product name: **rokid-termux**  
+Status: **draft / spatial viewport pivot accepted**  
+Product name: **Rokid Spatious Viewport**  
 Workflow owner: **CEO Agent**  
 Execution owner: **PM Agent**
 
 ## Product thesis
 
-`rokid-termux` should make device-side experimentation easier by combining:
+Rokid Spatious Viewport turns Rokid glasses into a head-tracked viewport into mirrored Android app/display surfaces.
 
-- Termux as the local command-line environment.
-- GitHub as the transition ledger.
-- Git worktrees as isolated job execution spaces.
-- Tmux as the local multi-agent console.
-- MetaProject documents as durable project memory.
+The Android companion app captures a user-approved Android app window or display using MediaProjection, maps the captured frame into a padded virtual canvas, and eventually sends a tiled overscan region to the Rokid-side app. The Rokid app crops locally from the cached region according to head pose and displays a fixed center reticle.
+
+Termux is a future/flagship mirrored-app use case, not the core architecture.
 
 ## Problem
 
-Developing experimental workflows across Android, Termux, Rokid hardware/software, and AI coding agents can easily become fragmented.
+Small glasses displays are not large enough to show a full Android app surface comfortably. Mirroring an entire app into the physical viewport forces the user to choose between unreadably small text and constant manual zooming/panning.
 
 Common failure modes:
 
-- Setup steps are not reproducible.
-- Device assumptions are hidden in chat history.
-- Agents modify unrelated files.
-- Reviews focus on whether code exists, not whether the user goal improved.
-- There is no stable place to store product truth and execution truth.
+- Full app mirror is too small to read.
+- Pixel mirroring lacks spatial navigation.
+- Head movement is underused as a viewport control.
+- App-specific terminal or workflow assumptions limit product scope too early.
+- Capture and input/control concerns are mixed together.
 
 ## Target users
 
 ### Boss / maintainer
 
-Needs a lightweight control plane for turning goals into verified branches.
+Needs a clear path from concept to prototype without stale `rokid-termux` assumptions.
 
 ### PM Agent
 
-Needs unambiguous job contracts, branch names, worktree paths, review checklists, and state transitions.
+Needs unambiguous implementation order, branch sequencing, review checklists, and state transitions.
 
 ### Developer sub-agent
 
@@ -43,93 +41,135 @@ Needs a small task with clear scope, allowed files, tests, and required report.
 
 ### Future technical user
 
-Needs setup docs, scripts, troubleshooting notes, and a demo.
+Wants to view Android app surfaces through Rokid glasses using a stable, readable, head-tracked viewport.
 
-## Core objects
+## Core product objects
 
 | Object | Meaning |
 |---|---|
-| Goal | Desired world state. |
-| Feature | User-visible or project-visible capability. |
-| Phase | Demonstrable increment. |
-| Job | Scoped, reviewable state transition. |
-| Branch | Isolated implementation attempt. |
-| Worktree | Local filesystem workspace for one branch. |
-| PR | Proposed state transition. |
-| Review | Verification gate. |
-| Demo | Human-verifiable proof. |
+| Captured surface | Android app/display pixels approved through MediaProjection. |
+| Content canvas | Captured frame mapped into a virtual coordinate system. |
+| Padded canvas | Content canvas plus half-viewport padding so the reticle can point at true corners. |
+| Viewport | Physical Rokid visible region in canvas coordinates. |
+| Reticle | Fixed center pointer used for aiming/selection. |
+| Head pose | Orientation input used to move the viewport. |
+| Overscan region | Region larger than the visible viewport cached on the Rokid side. |
+| Tile | Encoded piece of the virtual canvas/overscan region. |
+| PM job | Scoped, reviewable state transition. |
 
 ## MVP definition
 
-The first MVP is not a polished app. It is a verified workflow:
+The first MVP is not a polished Rokid product. It is a verified phone-side spatial viewport foundation:
 
-1. Clear project goal.
-2. Verified target environment report.
-3. Reproducible setup script.
-4. Minimal demo.
-5. Agent workflow that can produce and review changes safely.
+1. Kotlin Android project skeleton builds.
+2. Pure viewport geometry module exists and is unit tested.
+3. MediaProjection capture proof can show user-approved captured frames in a debug view.
+4. Captured/synthetic frame can be placed on a padded virtual canvas.
+5. A fixed-reticle viewport can pan over that canvas.
+
+## Current implementation order
+
+```text
+1. Clean root/meta docs to match the spatial viewport pivot.
+2. Create Kotlin Android project skeleton.
+3. Add pure viewport geometry module/tests first.
+4. Add MediaProjection capture proof after the Android skeleton and viewport-core exist.
+```
 
 ## Candidate capabilities
 
-### C001 — Environment discovery
+### C001 — Kotlin Android skeleton
 
-Collect and document:
+A minimal Kotlin Android Gradle app that builds and provides a debug entry screen.
 
-- Android version.
-- Termux source and version.
-- CPU architecture.
-- Available package manager state.
-- Storage permissions.
-- Shell and Python availability.
-- Git/tmux availability.
-- Rokid-specific device/app constraints, if applicable.
+Acceptance:
 
-### C002 — Termux bootstrap
+- Kotlin Android skeleton exists.
+- Build command is documented.
+- Main/debug screen exists.
+- No MediaProjection implementation yet.
 
-A single setup path for required packages and shell environment.
+### C002 — Spatial viewport core
 
-### C003 — Agent PM runtime
+Pure Kotlin viewport geometry independent from Android UI.
 
-Scripts and docs for:
+Acceptance:
 
-- Creating one branch per job.
-- Creating one worktree per branch.
-- Launching one tmux window/session per job.
-- Capturing completion reports.
-- Running validation.
+- Padded canvas calculation exists.
+- Pose/normalized input can map to reticle point.
+- Reticle maps to viewport rectangle.
+- Unit tests cover center and all four corners.
+- Reticle can point at true content corners with half-viewport padding.
 
-### C004 — Device probe
+### C003 — MediaProjection capture proof
 
-A non-destructive script that reports whether the environment is ready.
+A minimal Android capture proof.
 
-### C005 — First demo
+Acceptance:
 
-A tiny, useful capability that runs on the target environment and proves the workflow.
+- Starts through Android system consent.
+- Creates virtual display/capture surface.
+- Shows captured frames in debug UI.
+- Stops and releases resources cleanly.
+- Handles resize/rotation or documents limitation.
 
-## Out of scope before P01 completion
+### C004 — Phone-side viewport simulator
 
-- Heavy Android app development.
-- Hardware-specific assumptions not verified on the target device.
-- Credential-dependent cloud integrations.
-- Root-only workflows.
-- Complex CI/CD beyond metadata validation.
-- Broad automated merging.
+A debug UI that pans a viewport over synthetic/captured content.
+
+Acceptance:
+
+- Shows fixed center reticle.
+- Pans across padded canvas.
+- Recenter/freeze controls exist or are stubbed.
+- Debug coordinates are visible.
+
+### C005 — Overscan cache prototype
+
+Local prototype of Strategy C before Rokid transport.
+
+Acceptance:
+
+- Computes overscan region larger than viewport.
+- Can crop visible viewport from cached region.
+- Shows cache/viewport debug overlay.
+
+### C006 — Rokid renderer skeleton
+
+Future step after phone-side simulator and capture proof are stable.
+
+Acceptance:
+
+- Uses same viewport geometry model.
+- Displays cached region on Rokid.
+- Uses actual or fake head-pose provider.
+
+## Out of scope before C001–C003 complete
+
+- Rokid SDK integration.
+- ASR input.
+- Bluetooth ring input.
+- Termux-specific terminal emulation.
+- OCR/semantic app understanding.
+- AccessibilityService app control.
+- Recording/screenshot persistence.
+- Cloud/network streaming outside local/dev experiments.
 
 ## Verification strategy
 
 A change is accepted only when it passes the appropriate level:
 
-1. Local script/test validation.
+1. Local build/test validation.
 2. PM Agent diff and scope review.
-3. CEO Agent product-coherence review.
+3. Product-coherence review against this spec and ADRs.
 4. Boss/User verification for visible behavior.
 
 ## Open questions
 
 | ID | Question | Owner | Target phase |
 |---|---|---|---|
-| Q001 | What exact Rokid device/model/app environment is targeted? | Boss + P01 discovery agent | P01 |
-| Q002 | Is Termux running directly on a phone, on a Rokid computing unit, or as part of a companion-device workflow? | Boss + P01 discovery agent | P01 |
-| Q003 | Should the project output be scripts, docs, an Android app, or an agent runtime? | CEO Agent | P01 |
-| Q004 | What is the smallest demo that feels useful to Boss? | Boss + CEO Agent | P01 |
-| Q005 | What local model/agent tooling will the PM session actually use? | PM Agent | P01 |
+| Q001 | Exact Rokid display/head-pose SDK path? | PM + future Rokid worker | After phone simulator |
+| Q002 | Should the skeleton use Compose or Android Views? | PM | Skeleton step |
+| Q003 | Which capture surface path should be used first: ImageReader or SurfaceTexture? | MediaProjection worker | Capture proof |
+| Q004 | What Fold 6 Android version is used for testing? | PM/Boss | Capture proof |
+| Q005 | Which mirrored app is the first manual demo target? | Boss + PM | After capture proof |
