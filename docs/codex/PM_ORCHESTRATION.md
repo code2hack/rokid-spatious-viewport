@@ -13,6 +13,7 @@ First read:
 - AGENTS.md
 - docs/codex/START_PROMPT.md
 - docs/codex/PM_ORCHESTRATION.md
+- docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md
 - docs/PROJECT_PLAN.md
 - docs/WORK_BREAKDOWN.md
 - docs/adr/0001-scope-spatial-viewport.md
@@ -25,12 +26,15 @@ First inspect the repository structure and current Android build state. Then rep
 1. whether an Android Gradle project already exists,
 2. current modules/packages/build commands,
 3. whether the repo can build/test now,
-4. what files/modules you propose to touch for Milestone A and Milestone B,
-5. whether two worker sessions are useful now.
+4. which stale root/meta docs still mention old rokid-termux framing,
+5. what files/modules you propose to touch for docs cleanup, Android skeleton, viewport core, and MediaProjection later,
+6. whether worker sessions are useful now.
 
-Then propose a small implementation plan for only:
-- Milestone A: Android MediaProjection capture proof,
-- minimum Milestone B: spatial viewport geometry + phone-side simulator.
+Proceed in this exact implementation order:
+1. Clean root/meta docs to match the spatial viewport pivot.
+2. Create Kotlin Android project skeleton.
+3. Add pure viewport geometry module/tests first.
+4. Add MediaProjection capture proof after the Android skeleton and viewport-core exist.
 
 Do not work on Rokid SDK, ASR, Bluetooth ring, Termux-specific logic, OCR, semantic app control, or AccessibilityService yet.
 
@@ -43,7 +47,7 @@ Current phase:
 
 ```text
 Minimum: 1 PM/integrator Codex session
-Recommended: 1 PM + 2 worker sessions
+Recommended: 1 PM + 2 worker sessions after skeleton exists
 Maximum: 1 PM + 3 worker sessions
 ```
 
@@ -51,7 +55,7 @@ Do not exceed two product workers until the capture + viewport simulator is work
 
 ## 3. Worker assignment rules
 
-The PM should only start worker sessions after repo inspection.
+The PM should only start worker sessions after repo inspection and after deciding whether the Android skeleton exists.
 
 The PM should give each worker:
 
@@ -64,29 +68,39 @@ The PM should give each worker:
 
 Workers should not share the same files unless the PM explicitly coordinates the merge order.
 
-## 4. Worker 1 — MediaProjection capture
+## 4. Work item 0 — root/meta docs cleanup
 
 Branch:
 
 ```text
-feat/mediaprojection-capture
-```
-
-Prompt file:
-
-```text
-docs/codex/workers/MEDIAPROJECTION_CAPTURE.md
+docs/spatial-viewport-pivot-cleanup
 ```
 
 Expected deliverable:
 
 ```text
-A minimal Android companion-side MediaProjection capture proof that can start/stop user-approved capture and show captured frames in a debug view.
+Root/meta docs consistently describe Rokid Spatious Viewport as a head-tracked spatial viewport for mirrored Android app/display surfaces.
 ```
 
-Do not assign viewport math or Rokid-side renderer to this worker unless the PM changes the plan.
+The PM may do this directly before starting workers.
 
-## 5. Worker 2 — Spatial viewport core
+## 5. Work item 1 — Kotlin Android project skeleton
+
+Branch:
+
+```text
+chore/android-kotlin-skeleton
+```
+
+Expected deliverable:
+
+```text
+A minimal Kotlin Android Gradle project with a simple app entry/debug screen and documented build command.
+```
+
+Do not implement MediaProjection in this work item.
+
+## 6. Worker 1 — Spatial viewport core
 
 Branch:
 
@@ -108,7 +122,29 @@ Pure spatial viewport geometry code with tests, plus a simple simulator path tha
 
 Do not assign MediaProjection service work to this worker unless the PM changes the plan.
 
-## 6. Optional worker 3 — Build/docs/test hygiene
+## 7. Worker 2 — MediaProjection capture
+
+Branch:
+
+```text
+feat/mediaprojection-capture
+```
+
+Prompt file:
+
+```text
+docs/codex/workers/MEDIAPROJECTION_CAPTURE.md
+```
+
+Expected deliverable:
+
+```text
+A minimal Android companion-side MediaProjection capture proof that can start/stop user-approved capture and show captured frames in a debug view.
+```
+
+Do not assign this worker until the Kotlin Android skeleton exists. Prefer waiting until viewport-core exists.
+
+## 8. Optional worker 3 — Build/docs/test hygiene
 
 Only use this worker if the repo needs setup cleanup before product work.
 
@@ -126,26 +162,29 @@ Allowed tasks:
 - add package/module notes,
 - no product feature implementation.
 
-## 7. Merge order recommendation
+## 9. Merge order recommendation
 
 Preferred merge order:
 
-1. Build/docs hygiene if needed.
-2. Spatial viewport core geometry.
-3. MediaProjection capture proof.
-4. Integration of captured frames into viewport simulator.
-5. Overscan cache prototype.
-6. Rokid renderer skeleton.
+1. Root/meta docs cleanup.
+2. Kotlin Android project skeleton.
+3. Spatial viewport core geometry/tests.
+4. MediaProjection capture proof.
+5. Integration of captured frames into viewport simulator.
+6. Overscan cache prototype.
+7. Rokid renderer skeleton.
 
 Reason:
 
-The geometry model should become the shared contract before capture integration and Rokid rendering depend on it.
+The Android skeleton and geometry model should become the shared contract before capture integration and Rokid rendering depend on it.
 
-## 8. Review checklist for PM
+## 10. Review checklist for PM
 
 Before merging worker work, check:
 
 - build/test command passes or failure is documented,
+- stale `rokid-termux` scope is removed or demoted to future-use-case language,
+- Android implementation uses Kotlin, not Java,
 - scope did not expand into ASR/ring/Rokid/Accessibility prematurely,
 - captured frames are not persisted by default,
 - `FLAG_SECURE` boundaries are respected,
@@ -153,7 +192,7 @@ Before merging worker work, check:
 - viewport reticle can point at all four content corners,
 - code names match the current product scope, not old `rokid-termux` scope.
 
-## 9. Stop conditions
+## 11. Stop conditions
 
 Stop and ask the user before:
 
