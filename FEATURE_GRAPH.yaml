@@ -1,13 +1,13 @@
 project:
-  id: rokid-termux
-  status: draft
-  last_updated: 2026-06-29
+  id: rokid-spatious-viewport
+  status: spatial_viewport_pivot_accepted
+  last_updated: 2026-06-30
   workflow: goal_graph_phase_branch_verify
 
 features:
   - id: F000
     name: MetaProject scaffold
-    status: implemented_by_scaffold
+    status: completed
     phase: P00
     user_value: "Creates durable project memory and a repeatable agent workflow."
     dependencies: []
@@ -15,112 +15,112 @@ features:
       - "Core MetaProject documents exist."
       - "Agent role prompts exist."
       - "Job templates exist."
-      - "Validation script passes."
-      - "Boss can hand off to ChatGPT Project and local Codex PM."
+      - "Validation script passes or known validation gaps are documented."
 
   - id: F001
-    name: Termux environment discovery
-    status: planned
+    name: Spatial viewport scope cleanup
+    status: current
     phase: P01
-    user_value: "Prevents building on false assumptions about the target Android/Termux environment."
+    user_value: "Prevents PM and worker agents from following stale rokid-termux assumptions."
     dependencies:
       - F000
     acceptance:
-      - "Termux install source and version are documented."
-      - "Android version and CPU architecture are documented."
-      - "Required packages are listed with installation status."
-      - "Known limitations are recorded."
+      - "README and root/meta docs describe Rokid Spatious Viewport as the core product."
+      - "Termux is described only as a future/flagship mirrored-app use case."
+      - "PM orchestration docs include the new implementation order."
 
   - id: F002
-    name: Rokid capability discovery
+    name: Kotlin Android project skeleton
     status: planned
     phase: P01
-    user_value: "Clarifies whether Rokid-specific work is possible and where integration should happen."
+    user_value: "Creates the minimal Android foundation needed for capture and viewport work."
     dependencies:
-      - F000
+      - F001
     acceptance:
-      - "Target Rokid model or app environment is identified."
-      - "Available SDK/API/app pathways are summarized."
-      - "Non-available or blocked pathways are documented."
-      - "Recommended integration path is proposed."
+      - "Minimal Android Gradle project exists."
+      - "Android implementation is Kotlin-first, not Java-first."
+      - "Simple app entry/debug screen exists."
+      - "Build command is documented."
+      - "MediaProjection is not implemented in this skeleton-only feature."
 
   - id: F003
-    name: Bootstrap design
+    name: Pure spatial viewport geometry core
     status: planned
     phase: P01
-    user_value: "Defines a setup flow before coding implementation scripts."
+    user_value: "Creates the reusable math contract for phone simulator, capture integration, and Rokid renderer."
     dependencies:
-      - F001
       - F002
     acceptance:
-      - "Bootstrap inputs, outputs, and safety boundaries are specified."
-      - "Package list is proposed."
-      - "Script architecture is proposed."
-      - "Failure and rollback behavior is described."
+      - "Pure Kotlin geometry module exists without Android UI dependency."
+      - "Padded canvas calculation exists."
+      - "Reticle-to-viewport mapping exists."
+      - "Tests cover center and all four content corners."
+      - "Reticle can point at true content corners using half-viewport padding."
 
   - id: F004
-    name: First demo definition
+    name: MediaProjection capture proof
     status: planned
     phase: P01
-    user_value: "Ensures the first build phase targets a concrete, verifiable demo."
+    user_value: "Proves the app can capture a user-approved app/display surface for viewport rendering."
     dependencies:
-      - F001
       - F002
+      - F003
     acceptance:
-      - "Demo goal is written."
-      - "Manual verification steps are written."
-      - "Phase P02 jobs can be derived from the demo."
+      - "Capture starts through Android system consent."
+      - "Virtual display/capture surface is created."
+      - "Captured frames appear in a debug view."
+      - "Capture can stop and release resources."
+      - "Resize/rotation is handled or limitation is documented."
+      - "Protected content boundaries are respected."
 
   - id: F005
-    name: Termux bootstrap implementation
+    name: Phone-side viewport simulator
     status: candidate
     phase: P02
-    user_value: "Lets a user prepare the environment with one documented command path."
+    user_value: "Lets the team prove spatial viewport UX before depending on Rokid SDK details."
     dependencies:
       - F003
+      - F004
     acceptance:
-      - "Bootstrap script is implemented."
-      - "Script is idempotent where practical."
-      - "Dry-run or safe reporting mode exists."
-      - "Setup docs are updated."
+      - "Synthetic or captured frame is placed on padded virtual canvas."
+      - "Fixed center reticle is shown."
+      - "Viewport can pan over the canvas."
+      - "Recenter/freeze/debug information exists."
 
   - id: F006
-    name: PM agent local runtime
+    name: Overscan cache prototype
     status: candidate
     phase: P02
-    user_value: "Lets local PM Agent coordinate branches, worktrees, tmux sessions, and reviews."
+    user_value: "Proves Strategy C locally before device transport."
     dependencies:
-      - F000
-      - F003
+      - F005
     acceptance:
-      - "PM can dispatch a phase into worktrees."
-      - "Completion reports have a standard location."
-      - "Review reports have a standard location."
-      - "PM status can be updated from job results."
+      - "Overscan region larger than viewport is computed."
+      - "Visible viewport can be cropped from cached region."
+      - "Cache edge/miss behavior is visible in debug UI."
 
   - id: F007
-    name: Device probe
-    status: candidate
-    phase: P02
-    user_value: "Creates a repeatable, non-destructive environment report."
-    dependencies:
-      - F001
-    acceptance:
-      - "Probe script runs without root."
-      - "Report includes OS, shell, package, git, tmux, Python, storage, and device hints."
-      - "Report avoids collecting secrets."
-
-  - id: F008
-    name: First useful demo
+    name: Rokid renderer skeleton
     status: candidate
     phase: P03
-    user_value: "Proves the project is more than setup by delivering one working behavior."
+    user_value: "Displays the spatial viewport on Rokid glasses using the shared geometry model."
     dependencies:
-      - F004
       - F005
+      - F006
+    acceptance:
+      - "Rokid-side app/client can display viewport from cached region."
+      - "Head-pose provider abstraction exists."
+      - "Fake pose provider works if Rokid SDK is unavailable."
+      - "Same geometry model is used as phone simulator."
+
+  - id: F008
+    name: Future input providers
+    status: future
+    phase: P04
+    user_value: "Adds convenient interaction once viewport and capture are proven."
+    dependencies:
       - F007
     acceptance:
-      - "Demo runs on target environment."
-      - "Demo has manual verification steps."
-      - "Demo output is documented."
-      - "Boss accepts or redirects next product direction."
+      - "Bluetooth ring provider can map confirm/cancel/scroll/recenter."
+      - "ASR provider can map command phrases."
+      - "Accessibility-gated app-control remains opt-in."
