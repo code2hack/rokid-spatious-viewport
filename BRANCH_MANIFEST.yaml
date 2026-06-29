@@ -1,0 +1,82 @@
+project: code2hack/rokid-termux
+default_branch: main
+workflow: goal_graph_phase_branch_verify
+last_updated: 2026-06-29
+
+branch_policy:
+  main:
+    purpose: "Verified project state."
+    direct_push: false_after_initial_scaffold
+  phase:
+    pattern: "phase/Pxx-short-name"
+    purpose: "Integration branch for one phase."
+  job:
+    pattern: "job/Pxx-Jxxx-short-name"
+    purpose: "One scoped job performed by one sub-agent."
+
+phases:
+  - id: P00
+    name: MetaProject scaffold
+    integration_branch: phase/P00-meta-scaffold
+    base_branch: main
+    status: ready_to_commit
+    jobs:
+      - id: P00-J001
+        title: Project kernel and product spec
+        branch: job/P00-J001-project-kernel
+        status: scaffolded
+        task_file: tasks/P00/J001-project-kernel.md
+        depends_on: []
+      - id: P00-J002
+        title: Agent protocol and prompts
+        branch: job/P00-J002-agent-protocol
+        status: scaffolded
+        task_file: tasks/P00/J002-agent-protocol.md
+        depends_on: []
+      - id: P00-J003
+        title: GitHub workflow templates
+        branch: job/P00-J003-github-workflow
+        status: scaffolded
+        task_file: tasks/P00/J003-github-workflow.md
+        depends_on: []
+      - id: P00-J004
+        title: Repository validation
+        branch: job/P00-J004-repo-validation
+        status: scaffolded
+        task_file: tasks/P00/J004-repo-validation.md
+        depends_on: []
+
+  - id: P01
+    name: Discovery and first-demo definition
+    integration_branch: phase/P01-discovery
+    base_branch: main
+    status: planned
+    jobs:
+      - id: P01-J001
+        title: Termux environment discovery
+        branch: job/P01-J001-termux-environment-discovery
+        status: ready_for_dispatch
+        task_file: tasks/P01/J001-termux-environment-discovery.md
+        depends_on: []
+      - id: P01-J002
+        title: Rokid capability discovery
+        branch: job/P01-J002-rokid-capability-discovery
+        status: ready_for_dispatch
+        task_file: tasks/P01/J002-rokid-capability-discovery.md
+        depends_on: []
+      - id: P01-J003
+        title: Bootstrap design
+        branch: job/P01-J003-bootstrap-design
+        status: blocked
+        task_file: tasks/P01/J003-bootstrap-design.md
+        depends_on:
+          - P01-J001
+          - P01-J002
+      - id: P01-J004
+        title: First demo definition
+        branch: job/P01-J004-first-demo-definition
+        status: blocked
+        task_file: tasks/P01/J004-first-demo-definition.md
+        depends_on:
+          - P01-J001
+          - P01-J002

@@ -1,0 +1,56 @@
+name: Job contract
+description: One scoped MetaProject job.
+title: "[JOB] Pxx-Jxxx: "
+labels: ["job"]
+body:
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      placeholder: P01
+    validations:
+      required: true
+  - type: input
+    id: job
+    attributes:
+      label: Job ID
+      placeholder: P01-J001
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      placeholder: job/P01-J001-short-name
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+    validations:
+      required: true
+  - type: textarea
+    id: scope_in
+    attributes:
+      label: Scope in
+    validations:
+      required: true
+  - type: textarea
+    id: scope_out
+    attributes:
+      label: Scope out
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation commands
+    validations:
+      required: true

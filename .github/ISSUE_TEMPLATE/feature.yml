@@ -1,0 +1,31 @@
+name: Feature
+description: Product or workflow capability.
+title: "[FEATURE] Fxxx: "
+labels: ["feature"]
+body:
+  - type: input
+    id: feature
+    attributes:
+      label: Feature ID
+      placeholder: F001
+    validations:
+      required: true
+  - type: textarea
+    id: user_value
+    attributes:
+      label: User value
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: input
+    id: phase
+    attributes:
+      label: Target phase
+      placeholder: P01
+    validations:
+      required: true

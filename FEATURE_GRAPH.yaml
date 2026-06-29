@@ -1,0 +1,126 @@
+project:
+  id: rokid-termux
+  status: draft
+  last_updated: 2026-06-29
+  workflow: goal_graph_phase_branch_verify
+
+features:
+  - id: F000
+    name: MetaProject scaffold
+    status: implemented_by_scaffold
+    phase: P00
+    user_value: "Creates durable project memory and a repeatable agent workflow."
+    dependencies: []
+    acceptance:
+      - "Core MetaProject documents exist."
+      - "Agent role prompts exist."
+      - "Job templates exist."
+      - "Validation script passes."
+      - "Boss can hand off to ChatGPT Project and local Codex PM."
+
+  - id: F001
+    name: Termux environment discovery
+    status: planned
+    phase: P01
+    user_value: "Prevents building on false assumptions about the target Android/Termux environment."
+    dependencies:
+      - F000
+    acceptance:
+      - "Termux install source and version are documented."
+      - "Android version and CPU architecture are documented."
+      - "Required packages are listed with installation status."
+      - "Known limitations are recorded."
+
+  - id: F002
+    name: Rokid capability discovery
+    status: planned
+    phase: P01
+    user_value: "Clarifies whether Rokid-specific work is possible and where integration should happen."
+    dependencies:
+      - F000
+    acceptance:
+      - "Target Rokid model or app environment is identified."
+      - "Available SDK/API/app pathways are summarized."
+      - "Non-available or blocked pathways are documented."
+      - "Recommended integration path is proposed."
+
+  - id: F003
+    name: Bootstrap design
+    status: planned
+    phase: P01
+    user_value: "Defines a setup flow before coding implementation scripts."
+    dependencies:
+      - F001
+      - F002
+    acceptance:
+      - "Bootstrap inputs, outputs, and safety boundaries are specified."
+      - "Package list is proposed."
+      - "Script architecture is proposed."
+      - "Failure and rollback behavior is described."
+
+  - id: F004
+    name: First demo definition
+    status: planned
+    phase: P01
+    user_value: "Ensures the first build phase targets a concrete, verifiable demo."
+    dependencies:
+      - F001
+      - F002
+    acceptance:
+      - "Demo goal is written."
+      - "Manual verification steps are written."
+      - "Phase P02 jobs can be derived from the demo."
+
+  - id: F005
+    name: Termux bootstrap implementation
+    status: candidate
+    phase: P02
+    user_value: "Lets a user prepare the environment with one documented command path."
+    dependencies:
+      - F003
+    acceptance:
+      - "Bootstrap script is implemented."
+      - "Script is idempotent where practical."
+      - "Dry-run or safe reporting mode exists."
+      - "Setup docs are updated."
+
+  - id: F006
+    name: PM agent local runtime
+    status: candidate
+    phase: P02
+    user_value: "Lets local PM Agent coordinate branches, worktrees, tmux sessions, and reviews."
+    dependencies:
+      - F000
+      - F003
+    acceptance:
+      - "PM can dispatch a phase into worktrees."
+      - "Completion reports have a standard location."
+      - "Review reports have a standard location."
+      - "PM status can be updated from job results."
+
+  - id: F007
+    name: Device probe
+    status: candidate
+    phase: P02
+    user_value: "Creates a repeatable, non-destructive environment report."
+    dependencies:
+      - F001
+    acceptance:
+      - "Probe script runs without root."
+      - "Report includes OS, shell, package, git, tmux, Python, storage, and device hints."
+      - "Report avoids collecting secrets."
+
+  - id: F008
+    name: First useful demo
+    status: candidate
+    phase: P03
+    user_value: "Proves the project is more than setup by delivering one working behavior."
+    dependencies:
+      - F004
+      - F005
+      - F007
+    acceptance:
+      - "Demo runs on target environment."
+      - "Demo has manual verification steps."
+      - "Demo output is documented."
+      - "Boss accepts or redirects next product direction."

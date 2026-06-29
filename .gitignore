@@ -1,0 +1,26 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Python/cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs/reports generated locally
+*.log
+tmp/
+.local/
+.env
+.env.*
+!.env.example
+
+# Agent local state
+.agents/local/
+worktrees/

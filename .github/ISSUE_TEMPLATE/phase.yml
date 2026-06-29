@@ -1,0 +1,42 @@
+name: Phase plan
+description: A demonstrable MetaProject phase.
+title: "[PHASE] Pxx: "
+labels: ["phase"]
+body:
+  - type: input
+    id: phase
+    attributes:
+      label: Phase ID
+      placeholder: P01
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Phase goal
+    validations:
+      required: true
+  - type: textarea
+    id: entry
+    attributes:
+      label: Entry criteria
+    validations:
+      required: true
+  - type: textarea
+    id: jobs
+    attributes:
+      label: Jobs
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification plan
+    validations:
+      required: true
+  - type: textarea
+    id: exit
+    attributes:
+      label: Exit criteria
+    validations:
+      required: true

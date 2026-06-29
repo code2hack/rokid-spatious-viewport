@@ -21,25 +21,42 @@ This is intentionally a hypothesis, not final product truth. The Boss should ref
 | `FEATURE_GRAPH.yaml` | Canonical feature graph. |
 | `PHASE_PLAN.md` | Phase-by-phase execution plan. |
 | `BRANCH_MANIFEST.yaml` | Branch/job manifest consumed by PM Agent. |
-| `AGENT_PROTOCOL.md` | Role boundaries and handoff protocol. |
-| `DEFINITION_OF_DONE.md` | Verification gates for jobs, phases, and releases. |
+| `AGENT_PROTOCOL.md` | Rules for CEO Agent, PM Agent, developer sub-agents, and reviewers. |
+| `DEFINITION_OF_DONE.md` | Verification gates for jobs, PRs, phases, and releases. |
+| `PM_STATUS.md` | Execution-state dashboard. |
+| `CEO_NOTES.md` | Product-state and planning notes. |
 
-## First phase
+## First execution path
 
-P01 is a discovery phase:
+1. Finish Phase P00 by committing this scaffold.
+2. Start Phase P01 discovery.
+3. Use one branch per job.
+4. Let the PM Agent create one worktree per job.
+5. Let each sub-agent work inside exactly one worktree.
+6. PM Agent reviews each job.
+7. CEO Agent reviews product coherence.
+8. Boss verifies usefulness.
+9. Merge only verified work.
 
-1. Verify Termux fork/build/runtime constraints.
-2. Verify Rokid AI Glasses development/display/input constraints.
-3. Decide whether the first demo should be native Android, Termux-based, browser-based, or hybrid.
-4. Produce a first demo definition before heavy implementation.
+## Phase P01 preview
 
-## Local PM start
+Phase P01 should discover what this project actually needs before building too much:
 
-After cloning:
+- Termux installation and runtime constraints.
+- Rokid device / platform constraints.
+- Whether the product should be a bootstrap script, an agent runtime, a device app, a workflow guide, or a hybrid.
+- The smallest useful demo.
+
+## Local validation
 
 ```bash
 python3 scripts/meta_validate.py
-scripts/pm_dispatch_phase.sh P01 origin/phase/P01-discovery
 ```
 
-See `.agents/prompts/LOCAL_CODEX_PM_SEED.md` for the PM session seed.
+## PM bootstrap
+
+```bash
+scripts/pm_dispatch_phase.sh P01 origin/main
+```
+
+This reads `tasks/P01/J*.md`, extracts job branches, and creates Git worktrees under `../worktrees` by default.
