@@ -1,7 +1,7 @@
 # Phase Plan
 
-Status: **draft**  
-Last updated: **2026-06-29**
+Status: **spatial viewport pivot accepted**  
+Last updated: **2026-06-30**
 
 ## Phase philosophy
 
@@ -20,115 +20,114 @@ Each phase must have:
 
 ## P00 — MetaProject scaffold
 
-Status: **ready to commit**
+Status: **completed / superseded by spatial viewport pivot**
 
 ### Goal
 
 Initialize durable project memory and the naive CEO/PM/sub-agent workflow.
 
-### Included features
-
-- F000 MetaProject scaffold.
-
-### Jobs
-
-| Job | Title | Branch | Status |
-|---|---|---|---|
-| P00-J001 | Project kernel and product spec | `job/P00-J001-project-kernel` | scaffolded |
-| P00-J002 | Agent protocol and prompts | `job/P00-J002-agent-protocol` | scaffolded |
-| P00-J003 | GitHub workflow templates | `job/P00-J003-github-workflow` | scaffolded |
-| P00-J004 | Repository validation | `job/P00-J004-repo-validation` | scaffolded |
-
 ### Exit criteria
 
 - Scaffold files exist.
-- Validation passes.
-- Initial commit is pushed to `main`.
-- Boss has a ChatGPT Project seed prompt and local Codex PM seed prompt.
+- Initial project memory exists.
+- PM and worker agent instructions exist.
 
-## P01 — Discovery and first-demo definition
+## P01 — Spatial viewport pivot cleanup and Android foundation
 
-Status: **planned**
+Status: **current**
 
 ### Goal
 
-Turn the project goal hypothesis into a verified direction.
+Align durable docs with the spatial viewport pivot and create the minimal Kotlin Android foundation for implementation.
 
 ### Entry criteria
 
-- P00 merged to `main`.
-- PM Agent has local clone.
-- Boss has created ChatGPT Project or equivalent CEO context.
+- Repository exists as `rokid-spatious-viewport`.
+- PM Agent has local clone on u4090.
+- Boss accepted the pivot from `rokid-termux` to spatial app/display viewport.
 
 ### Included features
 
-- F001 Termux environment discovery.
-- F002 Rokid capability discovery.
-- F003 Bootstrap design.
-- F004 First demo definition.
+- F001 Spatial viewport scope cleanup.
+- F002 Kotlin Android skeleton.
+- F003 Pure viewport geometry core.
+- F004 MediaProjection capture proof.
+
+### Required implementation order
+
+```text
+1. Clean root/meta docs to match the spatial viewport pivot.
+2. Create Kotlin Android project skeleton.
+3. Add pure viewport geometry module/tests first.
+4. Add MediaProjection capture proof after the Android skeleton and viewport-core exist.
+```
 
 ### Jobs
 
 | Job | Title | Branch | Depends on |
 |---|---|---|---|
-| P01-J001 | Termux environment discovery | `job/P01-J001-termux-environment-discovery` | P00 |
-| P01-J002 | Rokid capability discovery | `job/P01-J002-rokid-capability-discovery` | P00 |
-| P01-J003 | Bootstrap design | `job/P01-J003-bootstrap-design` | P01-J001, P01-J002 |
-| P01-J004 | First demo definition | `job/P01-J004-first-demo-definition` | P01-J001, P01-J002 |
+| P01-J001 | Spatial viewport docs cleanup | `docs/spatial-viewport-pivot-cleanup` | P00 |
+| P01-J002 | Kotlin Android project skeleton | `chore/android-kotlin-skeleton` | P01-J001 |
+| P01-J003 | Pure viewport geometry core/tests | `feat/spatial-viewport-core` | P01-J002 |
+| P01-J004 | MediaProjection capture proof | `feat/mediaprojection-capture` | P01-J002, P01-J003 preferred |
 
 ### Verification
 
-- Discovery reports are written.
-- Unknowns are explicit.
-- No large implementation is added.
-- CEO Agent updates `PROJECT_KERNEL.md`, `PRODUCT_SPEC.md`, `FEATURE_GRAPH.yaml`, and `PHASE_PLAN.md` if discovery changes the direction.
-- Boss approves the first demo definition.
+- Root/meta docs no longer present `rokid-termux` as core scope.
+- Kotlin Android skeleton builds.
+- Viewport-core tests pass.
+- MediaProjection capture proof starts through system consent and shows frames in debug UI.
+- No Rokid SDK, ASR, Bluetooth ring, Termux-specific logic, OCR, semantic app control, or AccessibilityService is added in this phase.
 
 ### Exit criteria
 
-- Target environment is described.
-- Product direction is clarified.
-- First demo is specified.
-- P02 jobs can be created without guessing.
+- Android skeleton exists and build command is documented.
+- Pure viewport geometry module exists with corner/padding tests.
+- MediaProjection proof exists or its blockers are explicitly documented.
+- PM can plan the phone-side simulator/overscan phase without guessing.
 
-## P02 — Bootstrap and probe
+## P02 — Phone-side spatial viewport simulator and overscan prototype
 
 Status: **candidate**
 
 ### Goal
 
-Implement the safe setup/probe foundation.
+Use captured or synthetic frames to prove the spatial viewport UX on the Fold 6 before depending on Rokid APIs.
 
 ### Candidate features
 
-- F005 Termux bootstrap implementation.
-- F006 PM agent local runtime.
-- F007 Device probe.
+- F005 Phone-side viewport simulator.
+- F006 Fixed center reticle overlay.
+- F007 Recenter/freeze/debug controls.
+- F008 Overscan cache prototype.
 
 ### Exit criteria
 
-- User can run a documented setup path.
-- User can run a non-destructive device probe.
-- PM Agent can dispatch branches/worktrees consistently.
+- A synthetic or captured frame is placed on a padded virtual canvas.
+- A fixed-reticle viewport pans over that canvas.
+- Overscan cache behavior is visible in debug UI.
+- PM can decide whether to start Rokid renderer work.
 
-## P03 — First useful demo
+## P03 — Rokid renderer proof
 
 Status: **candidate**
 
 ### Goal
 
-Deliver the smallest useful behavior on the target environment.
+Render the cached viewport on Rokid glasses and drive local crop with actual or fake head pose.
 
 ### Candidate features
 
-- F008 First useful demo.
+- F009 Rokid-side renderer skeleton.
+- F010 Head-pose provider abstraction.
+- F011 Tile cache client.
+- F012 Transport abstraction.
 
 ### Exit criteria
 
-- Demo runs in the target environment.
-- Demo has manual verification steps.
-- Boss verifies the demo.
-- P04 direction is replanned from actual feedback.
+- Rokid-side app displays viewport from cached region.
+- Head movement or fake pose controls the local crop.
+- Same geometry model is shared with phone-side simulator.
 
 ## P04+ — Product expansion
 
@@ -136,9 +135,10 @@ Status: **unplanned**
 
 Possible directions after P03:
 
-- Better device integration.
-- More complete agent runtime.
+- Bluetooth ring input provider.
+- ASR command provider.
+- Termux optimized mirrored-app profile.
+- Browser/document optimized profile.
+- Accessibility-gated interaction bridge.
+- OCR/semantic app understanding.
 - Packaging and distribution.
-- Documentation site.
-- Automation around GitHub issues/PRs.
-- Rokid-specific app/API integration, if discovery supports it.
