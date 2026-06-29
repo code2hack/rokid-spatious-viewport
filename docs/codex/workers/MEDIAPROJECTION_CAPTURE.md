@@ -15,9 +15,18 @@ feat/mediaprojection-capture
 Read before coding:
 
 - `AGENTS.md`
+- `docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md`
 - `docs/PROJECT_PLAN.md`
 - `docs/WORK_BREAKDOWN.md`
 - `docs/adr/0003-mediaprojection-boundaries.md`
+
+## Precondition
+
+Do not start this worker until the Kotlin Android project skeleton exists.
+
+Prefer starting this worker after `viewport-core` exists and its tests pass.
+
+If the skeleton is absent, stop and report that the PM must create the skeleton first. Do not create the skeleton from this worker unless the PM explicitly reassigns that work.
 
 ## Mission
 
@@ -36,7 +45,6 @@ start user-approved capture
 
 Allowed:
 
-- Android project/module setup if absent and approved by PM.
 - MediaProjection permission/consent flow.
 - Foreground service for capture.
 - VirtualDisplay creation.
@@ -48,6 +56,7 @@ Allowed:
 
 Not allowed in this worker unless PM explicitly expands scope:
 
+- Android project skeleton creation.
 - Rokid-side renderer.
 - Head-pose APIs.
 - Bluetooth ring.
@@ -72,9 +81,10 @@ Not allowed in this worker unless PM explicitly expands scope:
 Report to the PM:
 
 1. Existing Android project/module structure.
-2. Proposed files/modules to touch.
-3. Capture implementation path selected first: `ImageReader`, `SurfaceTexture`, or another simple path.
-4. Build/test command to verify.
+2. Whether viewport-core exists and how capture should connect to it later.
+3. Proposed files/modules to touch.
+4. Capture implementation path selected first: `ImageReader`, `SurfaceTexture`, or another simple path.
+5. Build/test command to verify.
 
 ## Acceptance criteria
 
