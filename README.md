@@ -1,62 +1,69 @@
-# rokid-termux
+# Rokid Spatious Viewport
 
-Status: **MetaProject scaffold initialized**  
-Date: **2026-06-29**  
-Workflow: **Goal → Graph → Phase → Branch → Verify**
+Status: **spatial viewport pivot accepted**  
+Primary development device: **u4090**  
+Android companion target: **Samsung Fold 6**  
+Implementation language preference: **Kotlin**
 
-This repository is managed as a MetaProject experiment: each meaningful change should trace from a goal, to a feature, to a phase, to a job contract, to a Git branch, to verification.
+Rokid Spatious Viewport turns Rokid glasses into a head-tracked viewport into mirrored Android app/display surfaces.
 
-## Current goal hypothesis
+The Android companion app captures a user-approved Android display or app window, maps the captured frame into a padded virtual canvas, and eventually streams a tiled overscan region to the Rokid-side app. The Rokid app crops locally from the cached region according to head pose and shows a fixed center reticle.
 
-Build a reproducible Termux-based development and agent workflow for Rokid / Android-device experimentation.
+Termux is now only a future/flagship mirrored-app use case. The project is no longer primarily a Termux bootstrap or terminal project.
 
-This is intentionally a hypothesis, not final product truth. The Boss should refine it after the first discovery phase.
+## Current implementation order
+
+The PM should follow this order:
+
+1. **Clean root/meta docs** so all durable docs match the spatial viewport pivot.
+2. **Create a Kotlin Android project skeleton**.
+3. **Add a pure viewport geometry module with tests**.
+4. **Add a MediaProjection capture proof** after the Android skeleton and geometry module exist.
+
+Do not start with Rokid SDK, ASR, Bluetooth ring, Termux-specific logic, OCR, semantic app control, or AccessibilityService.
 
 ## Project control files
 
 | File | Purpose |
 |---|---|
-| `PROJECT_KERNEL.md` | Smallest durable statement of goal, users, constraints, non-goals, and success criteria. |
-| `PRODUCT_SPEC.md` | Draft product specification and feature boundaries. |
-| `FEATURE_GRAPH.yaml` | Canonical feature graph. |
-| `PHASE_PLAN.md` | Phase-by-phase execution plan. |
-| `BRANCH_MANIFEST.yaml` | Branch/job manifest consumed by PM Agent. |
-| `AGENT_PROTOCOL.md` | Rules for CEO Agent, PM Agent, developer sub-agents, and reviewers. |
-| `DEFINITION_OF_DONE.md` | Verification gates for jobs, PRs, phases, and releases. |
-| `PM_STATUS.md` | Execution-state dashboard. |
-| `CEO_NOTES.md` | Product-state and planning notes. |
-
-## First execution path
-
-1. Finish Phase P00 by committing this scaffold.
-2. Start Phase P01 discovery.
-3. Use one branch per job.
-4. Let the PM Agent create one worktree per job.
-5. Let each sub-agent work inside exactly one worktree.
-6. PM Agent reviews each job.
-7. CEO Agent reviews product coherence.
-8. Boss verifies usefulness.
-9. Merge only verified work.
-
-## Phase P01 preview
-
-Phase P01 should discover what this project actually needs before building too much:
-
-- Termux installation and runtime constraints.
-- Rokid device / platform constraints.
-- Whether the product should be a bootstrap script, an agent runtime, a device app, a workflow guide, or a hybrid.
-- The smallest useful demo.
-
-## Local validation
-
-```bash
-python3 scripts/meta_validate.py
-```
+| `AGENTS.md` | Repository entry instructions for PM and worker agents. |
+| `docs/codex/START_PROMPT.md` | Starting prompt for the PM Codex session. |
+| `docs/codex/PM_ORCHESTRATION.md` | Explicit PM orchestration and worker assignment guide. |
+| `docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md` | Current implementation-order decisions. |
+| `docs/PROJECT_PLAN.md` | Spatial viewport product and architecture plan. |
+| `docs/WORK_BREAKDOWN.md` | Phase-by-phase work breakdown. |
+| `docs/adr/` | Accepted architecture decisions. |
+| `PROJECT_KERNEL.md` | Durable project kernel and constraints. |
+| `PRODUCT_SPEC.md` | Current product specification. |
+| `FEATURE_GRAPH.yaml` | Current feature graph. |
+| `PHASE_PLAN.md` | Current phase plan. |
 
 ## PM bootstrap
 
-```bash
-scripts/pm_dispatch_phase.sh P01 origin/main
+A PM Codex session should start with:
+
+```text
+Read AGENTS.md and follow the PM/integrator instructions.
 ```
 
-This reads `tasks/P01/J*.md`, extracts job branches, and creates Git worktrees under `../worktrees` by default.
+The PM should then read `docs/codex/NEXT_IMPLEMENTATION_DECISIONS.md` before coding or assigning workers.
+
+## First technical breakthrough
+
+```text
+Kotlin Android skeleton
+→ pure viewport geometry model/tests
+→ MediaProjection capture proof
+→ captured frame on padded virtual canvas
+→ viewport pan over that canvas
+→ fixed center reticle
+→ overscan cache prototype
+```
+
+## Hard boundaries
+
+- Do not bypass `FLAG_SECURE` or protected content.
+- Do not persist captured frames by default.
+- MediaProjection is display-only; app control is a separate optional future layer.
+- AccessibilityService interaction requires explicit approval.
+- Spark is out of scope for this phase.
