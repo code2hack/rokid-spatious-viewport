@@ -1,110 +1,108 @@
 # Project Kernel
 
-Status: **draft**  
-Owner: **Boss + CEO Agent**  
-Last updated: **2026-06-29**
+Status: **spatial viewport pivot accepted**  
+Owner: **Boss + PM/CEO Agents**  
+Last updated: **2026-06-30**
 
 ## Goal
 
-Build a useful, reproducible, agent-friendly Termux workflow for Rokid / Android-device experimentation.
+Build a head-tracked spatial viewport for mirrored Android app/display surfaces on Rokid glasses.
 
-The first validated outcome should be small: a developer can clone this repo, run a documented setup path, and verify one meaningful demo on the target environment.
+The Android companion app captures a user-approved Android app window or display, maps the captured frame into a padded virtual canvas, and eventually sends a tiled overscan region to the Rokid-side app. The Rokid app crops locally from the cached region according to head pose and displays a fixed center reticle.
+
+The first validated outcome should be small: a Kotlin Android app skeleton, a pure viewport geometry module with tests, and a MediaProjection capture proof that can show captured frames in a debug view.
 
 ## User / consumer
 
 Primary users:
 
-- Boss / maintainer who wants AI agents to develop and verify the project with minimal ambiguity.
+- Boss / maintainer who wants a working spatial viewport prototype and clear agent execution plan.
 - Local PM Agent / Codex session coordinating branches, worktrees, tests, and reviews.
-- Future developers or users who want a reproducible Termux-based setup on Android/Rokid-related hardware.
+- Developer sub-agents implementing narrow pieces such as viewport geometry or MediaProjection capture.
+- Future users who want to view Android app surfaces through Rokid glasses with a head-tracked viewport.
 
 ## Value proposition
 
-This project should reduce the friction between an idea and a verified device-side experiment.
+Rokid Spatious Viewport should make Android app surfaces usable in glasses without shrinking the whole app into the physical display.
 
-Instead of scattered notes and manual commands, the repo should provide:
+Instead of fitting an entire app into a small visible area, the system provides:
 
-- A clear goal/spec/phase/job graph.
-- Reproducible setup commands.
-- Agent-readable job contracts.
-- Verification scripts and review checklists.
-- A path from discovery to a working demo.
+- A larger virtual canvas.
+- A fixed center reticle.
+- Head-tracked viewport movement.
+- Local crop from cached overscan tiles.
+- Later optional input via ring, ASR, phone touch, or accessibility-gated gestures.
 
-## Goal hypothesis
+## Current product truth
 
-`rokid-termux` may become one or more of:
+The project is not primarily a Termux terminal/bootstrap project anymore.
 
-1. A Termux bootstrap kit for Android / Rokid-related workflows.
-2. A PM-agent runtime using `git worktree`, `tmux`, and local coding agents.
-3. A documented research repo for Rokid + Termux constraints.
-4. A device-side demo that proves the workflow is useful.
+Termux remains a future/flagship mirrored-app use case, but the core architecture is:
 
-The first phase should decide which interpretation is correct.
+```text
+MediaProjection capture
+→ padded virtual canvas
+→ spatial viewport geometry
+→ tiled overscan cache
+→ Rokid-side local crop
+```
 
-## Non-goals
+## Current implementation order
 
-Until Phase P01 discovery finishes, this project should not:
+```text
+1. Clean root/meta docs to match the spatial viewport pivot.
+2. Create Kotlin Android project skeleton.
+3. Add pure viewport geometry module/tests first.
+4. Add MediaProjection capture proof after the Android skeleton and viewport-core exist.
+```
 
-- Require rooting a device.
-- Assume a specific Rokid model without evidence.
-- Assume a specific Android version without evidence.
-- Build a large app before verifying the target environment.
-- Introduce cloud services, credentials, or paid APIs as mandatory dependencies.
-- Allow agents to perform broad, unscoped refactors.
+## Non-goals for current phase
+
+- Rokid SDK integration before the phone-side simulator and capture proof exist.
+- ASR or Bluetooth ring integration.
+- Termux-specific logic beyond acknowledging it as a future use case.
+- OCR or semantic understanding of arbitrary apps.
+- AccessibilityService app control.
+- Bypassing `FLAG_SECURE` or protected content.
+- Persisting captured frames by default.
+- Spark-based development; u4090 is the main development device for now.
 
 ## Constraints
 
-- Prefer shell/Python scripts that work in constrained environments.
-- Prefer no-root Android/Termux workflows unless Boss explicitly changes this.
+- Prefer Kotlin, not Java, for Android implementation.
+- Keep pure viewport geometry independent of Android UI dependencies.
 - Keep each job branch narrow and reviewable.
 - Every job must include acceptance criteria.
-- Every product decision should be recorded in `decisions/`.
-- PM Agent owns local execution state; CEO Agent owns product truth.
+- Capture must require Android system consent.
+- MediaProjection is display-only; app control is a separate optional future layer.
+- Every product decision should be recorded in docs or ADRs.
 
-## Success criteria
+## Success criteria for the next implementation slice
 
-Phase P00 succeeds when:
+The next slice succeeds when:
 
-- This scaffold is committed to the repository.
-- `python3 scripts/meta_validate.py` passes.
-- The Boss can paste `.agents/prompts/CHATGPT_PROJECT_SEED.md` into a ChatGPT Project.
-- The local Codex/PM session can consume `.agents/prompts/LOCAL_CODEX_PM_SEED.md`.
-
-Phase P01 succeeds when:
-
-- Target device and Termux environment constraints are documented.
-- The project direction is clarified.
-- The first useful demo is specified.
-- Phase P02 jobs can be dispatched without guessing.
+- Root/meta docs no longer present stale `rokid-termux` as the core scope.
+- A minimal Kotlin Android project skeleton builds.
+- A pure viewport geometry module exists and has tests for center/corner/padding behavior.
+- MediaProjection proof starts capture through Android consent and shows captured frames in a debug view.
+- The repo documents the build/test commands.
 
 ## First demo
 
-Draft demo, pending P01:
+Draft demo:
 
-> On the target Android/Termux environment, run a single command from this repo that prints a structured environment report and confirms the minimum package/runtime assumptions.
-
-Possible command:
-
-```bash
-./scripts/device_probe.sh
-```
-
-`device_probe.sh` is not part of P00. It should be designed after discovery.
+> On the Fold 6, start the Android companion app, approve MediaProjection capture, display the captured app/display frame in a debug viewport, and pan a fixed-reticle viewport over a padded virtual canvas.
 
 ## Risks
 
 | Risk | Mitigation |
 |---|---|
-| We build before understanding device constraints | P01 is discovery-only. |
-| Agents edit unrelated files | One job contract, one branch, one worktree. |
-| Termux/Rokid assumptions are wrong | Mark all product claims as hypotheses until verified. |
-| Workflow overhead becomes heavier than project | Keep Phase P00 minimal and automate only repeated actions. |
-| Reviews become vague | Use explicit acceptance criteria and review templates. |
-
-## Current state
-
-Repository initialized with MetaProject scaffold.
+| Android skeleton choices block progress | Keep skeleton minimal and Kotlin-first. |
+| MediaProjection complexity hides viewport logic | Build pure viewport-core before capture proof. |
+| Agents revive old Termux scope | Root docs and AGENTS.md explicitly state the pivot. |
+| Protected content appears blank | Treat `FLAG_SECURE` as a platform boundary, not a bug. |
+| Rokid SDK unknowns slow MVP | Build phone-side simulator first. |
 
 ## Target state
 
-A verified, documented, reproducible workflow for Rokid/Android/Termux experimentation, developed through phase-based agent coordination.
+A verified, documented, reproducible prototype where a user-approved Android app/display surface can be inspected through a head-tracked spatial viewport, developed through small PM-reviewed branches.
